@@ -4,12 +4,17 @@ services:
     image: mysql
     container_name: db
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_ROOT_PASSWORD: steve
       MYSQL_DATABASE: tasks
     ports:
       - "3306:3306"
     networks:
       - task_net
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -h db -uroot -p$$MYSQL_ROOT_PASSWORD -e 'SELECT 1;'"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   pma:
     image: phpmyadmin
@@ -17,7 +22,7 @@ services:
       - "8080:80"
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: rootpassword  # Use the same root password as MySQL
+      MYSQL_ROOT_PASSWORD: steve  # Use the same root password as MySQL
     depends_on:
       - db
     networks:
@@ -31,7 +36,8 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - task_net
 

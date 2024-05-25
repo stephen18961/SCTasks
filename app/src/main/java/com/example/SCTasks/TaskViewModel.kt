@@ -1,11 +1,10 @@
+package com.example.SCTasks
+
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.SCTasks.ApiClient.taskApiService
-import com.example.SCTasks.Task
-import com.example.SCTasks.TaskResponse
-import com.example.SCTasks.TaskStatusUpdate
+import com.example.SCTasks.ApiClient.taskApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,66 +14,71 @@ class TaskViewModel : ViewModel() {
     private val _tasks = MutableLiveData<List<Task>>()
     val tasks: LiveData<List<Task>> get() = _tasks
 
-    private val _statusZeroCount = MutableLiveData<Int>()
-    val statusZeroCount: LiveData<Int> get() = _statusZeroCount
+    private val _statusNewCount = MutableLiveData<Int>()
+    val statusNewCount: LiveData<Int> get() = _statusNewCount
 
-    private val _statusOneCount = MutableLiveData<Int>()
-    val statusOneCount: LiveData<Int> get() = _statusOneCount
+    private val _statusInProgressCount = MutableLiveData<Int>()
+    val statusInProgressCount: LiveData<Int> get() = _statusInProgressCount
 
-    private val _statusTwoCount = MutableLiveData<Int>()
-    val statusTwoCount: LiveData<Int> get() = _statusTwoCount
+    private val _statusDoneCount = MutableLiveData<Int>()
+    val statusDoneCount: LiveData<Int> get() = _statusDoneCount
+
+    init {
+        getTasks()
+    }
     fun setTasks(taskList: List<Task>) {
         _tasks.value = taskList
         updateStatusCounts(taskList)
     }
 
     fun getTasks() {
-        val call = taskApiService.getTasks()
+        val call = taskApi.getTasks()
 
         call.enqueue(object : Callback<TaskResponse> {
             override fun onFailure(call: Call<TaskResponse>, t: Throwable) {
-                Log.e("TaskViewModel", "Failed to get tasks", t)
+                Log.e("com.example.SCTasks.TaskViewModel", "Failed to get tasks", t)
             }
 
             override fun onResponse(call: Call<TaskResponse>, response: Response<TaskResponse>) {
                 if (response.isSuccessful) {
-                    val taskList = response.body()?.task ?: emptyList()
+                    val taskList = response.body()?.tasks ?: emptyList()
                     setTasks(taskList)
+                    Log.d("Tasks retrieved successfully", _tasks.value.toString())
                 } else {
-                    Log.e("TaskViewModel", "Failed to get tasks \n ${response.errorBody()?.string() ?: ""}")
+                    Log.e("com.example.SCTasks.TaskViewModel", "Failed to get tasks \n ${response.errorBody()?.string() ?: ""}")
                 }
             }
         })
     }
 
     private fun updateStatusCounts(taskList: List<Task>) {
-        val statusZero = taskList.count { it.status == "0" }
-        val statusOne = taskList.count { it.status == "1" }
-        val statusTwo = taskList.count { it.status == "2" }
+        val statusNew = taskList.count { it.status == "New" }
+        val statusOne = taskList.count { it.status == "In Progress" }
+        val statusTwo = taskList.count { it.status == "Done" }
 
-        _statusZeroCount.value = statusZero
-        _statusOneCount.value = statusOne
-        _statusTwoCount.value = statusTwo
+        _statusNewCount.value = statusNew
+        _statusInProgressCount.value = statusOne
+        _statusDoneCount.value = statusTwo
 
-        Log.d("TaskViewModel", "Status counts updated - 0: $statusZero, 1: $statusOne, 2: $statusTwo")
+        Log.d("com.example.SCTasks.TaskViewModel", "Status counts updated - 0: $statusNew, 1: $statusOne, 2: $statusTwo")
     }
 
     fun updateTaskStatus(taskId: Int, newStatus: String) {
         val statusUpdate = TaskStatusUpdate(newStatus)
-        val call = taskApiService.updateTaskStatus(taskId, statusUpdate)
+        val call = taskApi.updateTaskStatus(taskId, statusUpdate)
 
         call.enqueue(object : Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("TaskViewModel", "Failed to update task status", t)
+                Log.e("com.example.SCTasks.TaskViewModel", "Failed to update task status", t)
             }
 
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     // Refresh tasks after successful update
                     getTasks()
-                    Log.d("TaskViewModel", "Task status updated successfully")
+                    Log.d("com.example.SCTasks.TaskViewModel", "Task status updated successfully")
                 } else {
-                    Log.e("TaskViewModel", "Failed to update task status \n ${response.errorBody()?.string() ?: ""}")
+                    Log.e("com.example.SCTasks.TaskViewModel", "Failed to update task status \n ${response.errorBody()?.string() ?: ""}")
                 }
             }
         })

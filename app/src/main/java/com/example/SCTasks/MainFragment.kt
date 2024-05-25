@@ -1,6 +1,5 @@
 package com.example.SCTasks
 
-import TaskViewModel
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -41,7 +40,7 @@ class MainFragment : Fragment() {
         val addTask =
             view.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(
                 R.id.addTaskButton
-            )
+        )
 
 
         addTask.setOnClickListener {
@@ -58,18 +57,18 @@ class MainFragment : Fragment() {
         })
 
         // Observe status counts
-        taskViewModel.statusZeroCount.observe(viewLifecycleOwner, Observer { count ->
-            Log.e("MainFragment", "Status 0 count: $count")
+        taskViewModel.statusNewCount.observe(viewLifecycleOwner, Observer { count ->
+            Log.e("MainFragment", "New count: $count")
             view.findViewById<TextView>(R.id.textNewCount).text = "$count tasks"
         })
 
-        taskViewModel.statusOneCount.observe(viewLifecycleOwner, Observer { count ->
-            Log.e("MainFragment", "Status 1 count: $count")
+        taskViewModel.statusInProgressCount.observe(viewLifecycleOwner, Observer { count ->
+            Log.e("MainFragment", "InProgress 1 count: $count")
             view.findViewById<TextView>(R.id.textInProgressCount).text = "$count tasks"
         })
 
-        taskViewModel.statusTwoCount.observe(viewLifecycleOwner, Observer { count ->
-            Log.e("MainFragment", "Status 2 count: $count")
+        taskViewModel.statusDoneCount.observe(viewLifecycleOwner, Observer { count ->
+            Log.e("MainFragment", "Done 2 count: $count")
             view.findViewById<TextView>(R.id.textDoneCount).text = "$count tasks"
         })
 

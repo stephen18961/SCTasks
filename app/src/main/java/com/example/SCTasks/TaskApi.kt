@@ -7,12 +7,12 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-interface TaskApiService {
+interface TaskApi {
 
     @GET("/tasks")
     fun getTasks(): Call<TaskResponse>
 
-    @POST("/tasks")
+    @POST("/new_task")
     fun postTask(@Body task: Task): Call<Task>
 
     @PUT("/tasks/{id}")

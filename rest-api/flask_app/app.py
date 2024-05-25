@@ -7,7 +7,7 @@ import os
 
 app = Flask(__name__)
 if os.getenv('FLASK_ENV') == 'docker':
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:rootpassword@db/tasks'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:steve@db/tasks'
 db = SQLAlchemy(app)
 CORS(app, resources={r"/*":{'origins':'*'}})
 # CORS(app, resources={r'/*':{'origins': 'http://localhost:8080',"allow_headers": "Access-Control-Allow-Origin"}})
@@ -16,14 +16,14 @@ migrate = Migrate(app, db)
 
 class Task(db.Model):
     __tablename__ = 'tasks'  # Specify the table name explicitly
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(120), nullable=False)
     category = db.Column(db.String(120), nullable=False)
     status = db.Column(db.String(120), nullable=False)
-    createdTime = db.Column(db.BigInteger, nullable=False)
-    finishedTime = db.Column(db.BigInteger, nullable=True)
-    duration = db.Column(db.BigInteger, nullable=True)
+    createdTime = db.Column(db.String(30))
+    finishedTime = db.Column(db.String(30))
+    duration = db.Column(db.Integer)
 
     def to_dict(self):
         return {
@@ -41,14 +41,14 @@ class Task(db.Model):
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
     tasks = Task.query.all()
-    return jsonify([task.to_dict() for task in tasks])
+    return jsonify({'tasks': [task.to_dict() for task in tasks]})
 
 @app.route('/tasks/<int:id>', methods=['GET'])
 def get_task(id):
     task = Task.query.get_or_404(id)
-    return jsonify(task.to_dict())
+    return jsonify({'task' : task.to_dict()})
 
-@app.route('/tasks', methods=['POST'])
+@app.route('/new_task', methods=['POST'])
 def create_task():
     data = request.get_json()
     task = Task(
@@ -62,7 +62,7 @@ def create_task():
     )   
     db.session.add(task)
     db.session.commit()
-    return jsonify(task.to_dict()), 201
+    return jsonify({'message': 'Task successfully created.'}), 201 
 
 @app.route('/tasks/<int:id>', methods=['PUT'])
 def update_task(id):

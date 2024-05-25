@@ -1,5 +1,5 @@
 package com.example.SCTasks
 
 data class TaskResponse(
-    val task: List<Task>
+    val tasks: List<Task>
 )

@@ -1,6 +1,5 @@
 package com.example.SCTasks
 
-import TaskViewModel
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -14,7 +13,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.example.SCTasks.ApiClient.taskApiService
+import com.example.SCTasks.ApiClient.taskApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -64,13 +63,14 @@ class NewTaskFragment : Fragment() {
                 val task = Task(
                     title = taskTitle.text.toString(),
                     description = taskDescription.text.toString(),
-                    status = "0",
-                    category = when (category) {
-                        "New" -> "0"
-                        "Urgent" -> "1"
-                        "Important" -> "2"
-                        else -> "0"
-                    },
+                    status = "New",
+                    category = (category),
+//                    category = when (category) {
+//                        "New" -> "0"
+//                        "Urgent" -> "1"
+//                        "Important" -> "2"
+//                        else -> "0"
+//                    },
                     createdTime = dateString
                 )
                 addTask(task)
@@ -88,7 +88,7 @@ class NewTaskFragment : Fragment() {
     }
 
     private fun addTask(task: Task) {
-        val call = taskApiService.postTask(task)
+        val call = taskApi.postTask(task)
 
         call.enqueue(object : Callback<Task> {
             override fun onFailure(call: Call<Task>, t: Throwable) {

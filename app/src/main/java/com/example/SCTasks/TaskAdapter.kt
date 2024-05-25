@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-// TaskAdapter.kt
-class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+class TaskAdapter(private var tasks: MutableList<Task>) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val taskName: TextView = itemView.findViewById(R.id.taskName)
@@ -26,4 +25,11 @@ class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdap
     }
 
     override fun getItemCount() = tasks.size
+
+    // Method to update the tasks list and notify the adapter
+    fun updateTasks(newTasks: List<Task>) {
+        tasks.clear()
+        tasks.addAll(newTasks)
+        notifyDataSetChanged()
+    }
 }

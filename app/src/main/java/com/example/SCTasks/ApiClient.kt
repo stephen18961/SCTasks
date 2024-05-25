@@ -9,5 +9,5 @@ object ApiClient {
         .addConverterFactory(MoshiConverterFactory.create())
         .build()
 
-    val taskApiService: TaskApiService = retrofit.create(TaskApiService::class.java)
+    val taskApi: TaskApi = retrofit.create(TaskApi::class.java)
 }
