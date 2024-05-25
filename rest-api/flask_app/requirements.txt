@@ -1,0 +1,12 @@
+alembic
+flask
+flask-cors
+flask-migrate
+flask-sqlalchemy
+greenlet
+itsdangerous
+jinja2
+mako
+markupsafe
+sqlalchemy
+mysqlclient
