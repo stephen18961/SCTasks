@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.SCTasks.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_newTaskFragment"
+            app:destination="@id/newTaskFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_taskFragment"
+            app:destination="@id/taskFragment" />
+    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/taskSelection"-->
+<!--        android:name="com.example.androidtaskapp.TaskSelection"-->
+<!--        android:label="fragment_task_selection"-->
+<!--        tools:layout="@layout/fragment_task_selection" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_taskSelection_to_taskDetailsFragment"-->
+<!--            app:destination="@id/taskDetailsFragment">-->
+<!--        </action>-->
+<!--    </fragment>-->
+    <fragment
+        android:id="@+id/newTaskFragment"
+        android:name="com.example.SCTasks.NewTaskFragment"
+        android:label="fragment_new_task"
+        tools:layout="@layout/fragment_new_task" >
+        <action
+            android:id="@+id/action_newTaskFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskDetailsFragment"
+        android:name="com.example.SCTasks.TaskDetailsFragment"
+        android:label="fragment_task_details"
+        tools:layout="@layout/fragment_task_details" >
+    </fragment>
+    <fragment
+        android:id="@+id/taskFragment"
+        android:name="com.example.SCTasks.TaskFragment"
+        android:label="fragment_task"
+        tools:layout="@layout/fragment_task" />
+</navigation>
