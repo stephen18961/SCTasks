@@ -9,30 +9,6 @@ import os
 
 db = SQLAlchemy()
 
-def create_app():
-    
-    app = Flask(__name__)
-
-    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:steve@db/taskapp"
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    
-    
-    engine = create_engine(app.config["SQLALCHEMY_DATABASE_URI"])
-    
-    if not database_exists(engine.url):
-        create_database(engine.url)
-        print(f"Database created.")
-    
-    db.init_app(app)
-    
-    with app.app_context():
-        db.create_all()
-        
-    return app
-    
-    
-app = create_app()
-
 class Task(db.Model):
     __tablename__ = 'tasks'  # Specify the table name explicitly
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -55,6 +31,32 @@ class Task(db.Model):
             'finishedTime': self.finishedTime,
             'duration': self.duration
         }
+
+def create_app():
+    
+    app = Flask(__name__)
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:steve@db/tasks"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    
+    
+    engine = create_engine(app.config["SQLALCHEMY_DATABASE_URI"])
+    
+    if not database_exists(engine.url):
+        create_database(engine.url)
+        print(f"Database created.")
+    
+    db.init_app(app)
+    
+    with app.app_context():
+        db.create_all()
+        
+    return app
+    
+    
+app = create_app()
+
+
 
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
