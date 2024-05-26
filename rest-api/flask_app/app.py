@@ -3,16 +3,35 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_migrate import Migrate
 from datetime import datetime
+from sqlalchemy import create_engine
+from sqlalchemy_utils import database_exists, create_database
 import os
 
-app = Flask(__name__)
-if os.getenv('FLASK_ENV') == 'docker':
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:steve@db/tasks'
-db = SQLAlchemy(app)
-CORS(app, resources={r"/*":{'origins':'*'}})
-# CORS(app, resources={r'/*':{'origins': 'http://localhost:8080',"allow_headers": "Access-Control-Allow-Origin"}})
-app.config.from_object(__name__)
-migrate = Migrate(app, db)
+db = SQLAlchemy()
+
+def create_app():
+    
+    app = Flask(__name__)
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:steve@db/taskapp"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    
+    
+    engine = create_engine(app.config["SQLALCHEMY_DATABASE_URI"])
+    
+    if not database_exists(engine.url):
+        create_database(engine.url)
+        print(f"Database created.")
+    
+    db.init_app(app)
+    
+    with app.app_context():
+        db.create_all()
+        
+    return app
+    
+    
+app = create_app()
 
 class Task(db.Model):
     __tablename__ = 'tasks'  # Specify the table name explicitly
@@ -36,7 +55,6 @@ class Task(db.Model):
             'finishedTime': self.finishedTime,
             'duration': self.duration
         }
-
 
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
