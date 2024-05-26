@@ -60,7 +60,7 @@ class TaskViewModel : ViewModel() {
         _statusInProgressCount.value = statusOne
         _statusDoneCount.value = statusTwo
 
-        Log.d("com.example.SCTasks.TaskViewModel", "Status counts updated - 0: $statusNew, 1: $statusOne, 2: $statusTwo")
+        Log.d("com.example.SCTasks.TaskViewModel", "Status counts updated - NEW: $statusNew, INPROG: $statusOne, DONE: $statusTwo")
     }
 
     fun updateTaskStatus(taskId: Int, newStatus: String) {

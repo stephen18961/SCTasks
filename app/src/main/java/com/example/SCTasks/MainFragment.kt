@@ -63,12 +63,12 @@ class MainFragment : Fragment() {
         })
 
         taskViewModel.statusInProgressCount.observe(viewLifecycleOwner, Observer { count ->
-            Log.e("MainFragment", "InProgress 1 count: $count")
+            Log.e("MainFragment", "InProgress count: $count")
             view.findViewById<TextView>(R.id.textInProgressCount).text = "$count tasks"
         })
 
         taskViewModel.statusDoneCount.observe(viewLifecycleOwner, Observer { count ->
-            Log.e("MainFragment", "Done 2 count: $count")
+            Log.e("MainFragment", "Done count: $count")
             view.findViewById<TextView>(R.id.textDoneCount).text = "$count tasks"
         })
 
