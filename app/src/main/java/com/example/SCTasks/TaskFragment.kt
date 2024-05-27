@@ -47,7 +47,7 @@ class TaskFragment : Fragment() {
                 bundle.putString("status", taskData.status)
                 bundle.putString("createdTime", taskData.createdTime)
                 bundle.putString("finishedTime", taskData.finishedTime)
-                bundle.putString("duration", taskData.duration.toString())
+                bundle.putString("duration", taskData.duration)
 
                 findNavController().navigate(R.id.action_taskFragment_to_taskDetailsFragment, bundle)
             }

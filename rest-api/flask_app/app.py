@@ -18,7 +18,7 @@ class Task(db.Model):
     status = db.Column(db.String(120), nullable=False)
     createdTime = db.Column(db.String(30))
     finishedTime = db.Column(db.String(30))
-    duration = db.Column(db.Integer)
+    duration = db.Column(db.String(120))
 
     def to_dict(self):
         return {
@@ -35,8 +35,12 @@ class Task(db.Model):
 def create_app():
     
     app = Flask(__name__)
-
-    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:steve@db/tasks"
+    if os.environ.get('FLASK_ENV') == 'docker':
+        db_url = "mysql://root:steve@db/tasks"
+    else:
+        db_url = "mysql://root:steve@localhost/tasks"
+    
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     
     
@@ -55,7 +59,6 @@ def create_app():
     
     
 app = create_app()
-
 
 
 @app.route('/tasks', methods=['GET'])
@@ -87,14 +90,38 @@ def create_task():
 @app.route('/tasks/<int:id>', methods=['PUT'])
 def update_task(id):
     data = request.get_json()
+    print('RECEIVED DATA:', data)
     task = Task.query.get_or_404(id)
-    task.title = data['title']
-    task.description = data['description']
-    task.category = data['category']
     task.status = data['status']
-    task.createdTime = data['createdTime']
-    task.finishedTime = data.get('finishedTime')
-    task.duration = data.get('duration')
+
+    if data['status'] == 'Done':
+        task.finishedTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        start = datetime.strptime(task.createdTime, "%Y-%m-%d %H:%M:%S")
+        finish = datetime.strptime(task.finishedTime, "%Y-%m-%d %H:%M:%S")
+
+        # Calculate the duration
+        duration = finish - start
+
+        # Get the total seconds of the duration
+        total_seconds = int(duration.total_seconds())
+
+        # Convert the total seconds into days, hours, minutes, and seconds
+        days, remainder = divmod(total_seconds, 86400)
+        hours, remainder = divmod(remainder, 3600)
+        minutes, seconds = divmod(remainder, 60)
+
+        # Format the duration string conditionally
+        if days > 0:
+            formatted_duration = f"{days} days, {hours} hours, {minutes} minutes, and {seconds} seconds"
+        elif hours > 0:
+            formatted_duration = f"{hours} hours, {minutes} minutes, and {seconds} seconds"
+        elif minutes > 0:
+            formatted_duration = f"{minutes} minutes, and {seconds} seconds"
+        else:
+            formatted_duration = f"{seconds} seconds"
+
+        task.duration = formatted_duration
+
     db.session.commit()
     return jsonify(task.to_dict())
 
@@ -107,4 +134,4 @@ def delete_task(id):
 
 if __name__ == '__main__':
     db.create_all()
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)

@@ -8,5 +8,5 @@ data class Task(
     val status: String,
     val createdTime: String,
     val finishedTime: String = "",
-    val duration: Int? = 0
+    val duration: String = ""
 )

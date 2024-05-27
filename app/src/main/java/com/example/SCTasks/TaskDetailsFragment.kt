@@ -59,7 +59,7 @@ class TaskDetailsFragment : Fragment() {
         textStatus.text = status.toString()
         textCreatedTime.text = createdTime.toString()
         textFinishedTime.text = finishedTime.toString()
-        textDuration.text = duration.toString() + " hour"
+        textDuration.text = duration.toString()
 
         // Show or hide buttons based on status
         when (status) {

@@ -32,7 +32,8 @@ services:
     build: ./flask_app
     environment:
       - FLASK_ENV=docker
-    command: ["flask", "run", "--host=0.0.0.0"]
+      - FLASK_DEBUG=1
+    command: ["flask", "--app", "app.py", "--debug", "run", "--host=0.0.0.0"]
     ports:
       - "5000:5000"
     depends_on:
