@@ -8,26 +8,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.fragment.app.viewModels
+import com.example.SCTasks.databinding.FragmentMainBinding
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 
 class MainFragment : Fragment() {
 
-    private val taskViewModel: TaskViewModel by viewModels()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        taskViewModel.getTasks()
-    }
+    private lateinit var binding: FragmentMainBinding
+    private lateinit var taskViewModel: TaskViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_main, container, false)
+        this.binding = FragmentMainBinding.inflate(inflater, container, false)
+        val view = binding.root
+        taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
 
         val btnNew: LinearLayout = view.findViewById(R.id.newButton)
         val btnInProgress: LinearLayout = view.findViewById(R.id.inProgressButton)
@@ -57,18 +56,18 @@ class MainFragment : Fragment() {
         })
 
         // Observe status counts
-        taskViewModel.statusNewCount.observe(viewLifecycleOwner, Observer { count ->
+        taskViewModel.statusNewCount.observe(viewLifecycleOwner) { count ->
             Log.e("MainFragment", "New count: $count")
             view.findViewById<TextView>(R.id.textNewCount).text = "$count tasks"
-        })
+        }
 
         taskViewModel.statusInProgressCount.observe(viewLifecycleOwner, Observer { count ->
-            Log.e("MainFragment", "InProgress 1 count: $count")
+            Log.e("MainFragment", "In Progress count: $count")
             view.findViewById<TextView>(R.id.textInProgressCount).text = "$count tasks"
         })
 
         taskViewModel.statusDoneCount.observe(viewLifecycleOwner, Observer { count ->
-            Log.e("MainFragment", "Done 2 count: $count")
+            Log.e("MainFragment", "Done count: $count")
             view.findViewById<TextView>(R.id.textDoneCount).text = "$count tasks"
         })
 

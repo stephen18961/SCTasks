@@ -64,13 +64,7 @@ class NewTaskFragment : Fragment() {
                     title = taskTitle.text.toString(),
                     description = taskDescription.text.toString(),
                     status = "New",
-                    category = (category),
-//                    category = when (category) {
-//                        "New" -> "0"
-//                        "Urgent" -> "1"
-//                        "Important" -> "2"
-//                        else -> "0"
-//                    },
+                    category = category,
                     createdTime = dateString
                 )
                 addTask(task)

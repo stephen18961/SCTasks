@@ -22,7 +22,7 @@ services:
       - db
 
   backend:
-      build: ./Backend
+      build: ./rest-api
       container_name: backend
       restart: always
       ports:

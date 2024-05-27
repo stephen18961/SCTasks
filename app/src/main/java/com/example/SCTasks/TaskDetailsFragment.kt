@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 
 /**
  * A simple [Fragment] subclass.
@@ -54,29 +55,29 @@ class TaskDetailsFragment : Fragment() {
 
         textTitle.text = title.toString()
         textDescription.text = description.toString()
-        textCategory.text = getCategoryText(category)
-        textStatus.text = getStatusText(status)
+        textCategory.text = category.toString()
+        textStatus.text = status.toString()
         textCreatedTime.text = createdTime.toString()
         textFinishedTime.text = finishedTime.toString()
         textDuration.text = duration.toString() + " hour"
 
         // Show or hide buttons based on status
         when (status) {
-            "0" -> {
+            "New" -> {
                 // Status is 0, show Start button, hide Done button, enable both buttons
                 btnStart.visibility = View.VISIBLE
                 btnDone.visibility = View.GONE
                 btnStart.isEnabled = true
                 btnDone.isEnabled = true
             }
-            "1" -> {
+            "In Progress" -> {
                 // Status is 1, hide Start button, show Done button, enable both buttons
                 btnStart.visibility = View.GONE
                 btnDone.visibility = View.VISIBLE
                 btnStart.isEnabled = true
                 btnDone.isEnabled = true
             }
-            "2" -> {
+            "Done" -> {
                 // Status is 2, hide both buttons, disable both buttons
                 btnStart.visibility = View.GONE
                 btnDone.visibility = View.GONE
@@ -87,22 +88,22 @@ class TaskDetailsFragment : Fragment() {
 
         // Set onClickListener for the Start button
         btnStart.setOnClickListener {
-            taskViewModel.updateTaskStatus(this.id, "1")// Update status to "In Progress" (1)
+            taskViewModel.updateTaskStatus(this.id, "In Progress")// Update status to "In Progress"
             taskViewModel.getTasks()
 
             // Show a toast message to indicate the status change
             showToast("Task is now In Progress")
-            requireActivity().supportFragmentManager.popBackStack()
+            view.findNavController().navigate(R.id.action_taskDetailsFragment_to_mainFragment)
         }
 
         // Set onClickListener for the Done button
         btnDone.setOnClickListener {
-            taskViewModel.updateTaskStatus(this.id, "2")// Update status to "Done" (2)
+            taskViewModel.updateTaskStatus(this.id, "Done")// Update status to "Done" (2)
             taskViewModel.getTasks()
 
             // Show a toast message to indicate the status change
             showToast("Task is now Done")
-            requireActivity().supportFragmentManager.popBackStack()
+            view.findNavController().navigate(R.id.action_taskDetailsFragment_to_mainFragment)
         }
 
         return view
@@ -111,24 +112,6 @@ class TaskDetailsFragment : Fragment() {
     // Function to show toast message
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun getStatusText(status: Any?): String {
-        return when (status) {
-            "0" -> "New"
-            "1" -> "In Progress"
-            "2" -> "Done"
-            else -> "Unknown"
-        }
-    }
-
-    private fun getCategoryText(category: Any?): String {
-        return when (category) {
-            "0" -> "Normal"
-            "1" -> "Urgent"
-            "2" -> "Important"
-            else -> "Unknown"
-        }
     }
 
 }

@@ -1,80 +1,104 @@
 package com.example.SCTasks
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-// TaskFragment.kt
 class TaskFragment : Fragment() {
 
-    private val taskViewModel: TaskViewModel by viewModels()
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var taskAdapter: TaskAdapter
-    private var taskStatus: String? = null
+    private val allTasksInfoModels = ArrayList<Task>()
+    private val tasksInfoModels = ArrayList<Task>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            taskStatus = it.getString("status")
-        }
-    }
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: TaskAdapter
+
+    private val taskViewModel: TaskViewModel by viewModels()
+
+    private var filterStatus: String? = null // Variable to hold the status filter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_task, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_task, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        adapter = TaskAdapter(tasksInfoModels)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        adapter.setOnItemClickListener(object : TaskAdapter.onItemClickListener {
+            override fun onItemClick(position: Int) {
+                val bundle = Bundle()
+                val taskData = tasksInfoModels[position]
 
-        taskAdapter = TaskAdapter(mutableListOf())
-        recyclerView.adapter = taskAdapter
+                taskData.id?.let { bundle.putInt("id", it) }
+                bundle.putString("title", taskData.title)
+                bundle.putString("description", taskData.description)
+                bundle.putString("category", taskData.category)
+                bundle.putString("status", taskData.status)
+                bundle.putString("createdTime", taskData.createdTime)
+                bundle.putString("finishedTime", taskData.finishedTime)
+                bundle.putString("duration", taskData.duration.toString())
 
-        taskViewModel.tasks.observe(viewLifecycleOwner, { taskList ->
-            val filteredTasks = getTasksByStatus(taskStatus)
-            taskAdapter.updateTasks(filteredTasks)
+                findNavController().navigate(R.id.action_taskFragment_to_taskDetailsFragment, bundle)
+            }
         })
 
-        taskViewModel.getTasks()
-    }
+        // Get the status filter from arguments
+        filterStatus = arguments?.getString("status")
 
-    private fun getTasksByStatus(status: String?): List<Task> {
-        val tasks = taskViewModel.tasks.value ?: emptyList()  // Get the current value of LiveData or an empty list if null
-
-        val selectedTasks = mutableListOf<Task>()
-
-        for (task in tasks) {
-            if (task.status.equals(status, ignoreCase = true)) {
-                selectedTasks.add(task)
+        val bottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.normalButton -> {
+                    filterTasksByStatusAndCategory(filterStatus,"Normal")
+                    true
+                }
+                R.id.urgentButton -> {
+                    filterTasksByStatusAndCategory(filterStatus,"Urgent")
+                    true
+                }
+                R.id.importantButton -> {
+                    filterTasksByStatusAndCategory(filterStatus,"Important")
+                    true
+                }
+                else -> false
             }
         }
-        Log.d("TaskFragment", "All tasks: $tasks")
-        Log.d("TaskFragment", "Selected tasks: $selectedTasks")
 
-        return selectedTasks
+        // Observe the tasks LiveData
+        taskViewModel.tasks.observe(viewLifecycleOwner) { taskList ->
+            // Update the RecyclerView with the new task list
+            allTasksInfoModels.clear()
+            allTasksInfoModels.addAll(taskList)
+            filterTasksByStatusAndCategory(filterStatus, "Normal")
+        }
+
+        // Load tasks from ViewModel
+        taskViewModel.getTasks()
+
+        return view
     }
 
 
-    companion object {
-        private const val ARG_STATUS = "status"
+    private fun filterTasksByStatusAndCategory(status: String?, category: String) {
+        val filteredTasks = allTasksInfoModels.filter { it.status == status && it.category == category }
+        updateRecyclerView(filteredTasks)
+    }
 
-        @JvmStatic
-        fun newInstance(status: String) =
-            TaskFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_STATUS, status)
-                }
-            }
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateRecyclerView(filteredTasks: List<Task>) {
+        tasksInfoModels.clear()
+        tasksInfoModels.addAll(filteredTasks)
+        adapter.notifyDataSetChanged()
     }
 }

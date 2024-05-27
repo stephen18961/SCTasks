@@ -26,7 +26,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/textViewTitle"
+                android:id="@+id/taskName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Title"
@@ -45,7 +45,7 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/viewSquare"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+                app:layout_constraintTop_toBottomOf="@id/taskName"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_weight="1"/>
 

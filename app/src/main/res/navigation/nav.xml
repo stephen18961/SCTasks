@@ -17,16 +17,16 @@
             android:id="@+id/action_mainFragment_to_taskFragment"
             app:destination="@id/taskFragment" />
     </fragment>
-<!--    <fragment-->
-<!--        android:id="@+id/taskSelection"-->
-<!--        android:name="com.example.androidtaskapp.TaskSelection"-->
-<!--        android:label="fragment_task_selection"-->
-<!--        tools:layout="@layout/fragment_task_selection" >-->
-<!--        <action-->
-<!--            android:id="@+id/action_taskSelection_to_taskDetailsFragment"-->
-<!--            app:destination="@id/taskDetailsFragment">-->
-<!--        </action>-->
-<!--    </fragment>-->
+    <fragment
+        android:id="@+id/taskFragment"
+        android:name="com.example.SCTasks.TaskFragment"
+        android:label="fragment_task_selection"
+        tools:layout="@layout/fragment_task" >
+        <action
+            android:id="@+id/action_taskFragment_to_taskDetailsFragment"
+            app:destination="@id/taskDetailsFragment">
+        </action>
+    </fragment>
     <fragment
         android:id="@+id/newTaskFragment"
         android:name="com.example.SCTasks.NewTaskFragment"
@@ -41,10 +41,8 @@
         android:name="com.example.SCTasks.TaskDetailsFragment"
         android:label="fragment_task_details"
         tools:layout="@layout/fragment_task_details" >
+        <action
+            android:id="@+id/action_taskDetailsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/taskFragment"
-        android:name="com.example.SCTasks.TaskFragment"
-        android:label="fragment_task"
-        tools:layout="@layout/fragment_task" />
 </navigation>
