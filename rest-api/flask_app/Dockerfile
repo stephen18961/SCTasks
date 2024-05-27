@@ -9,6 +9,6 @@ COPY . .
 
 ENV FLASK_ENV=docker
 
-RUN chmod +x entrypoint.sh
+# RUN chmod +x entrypoint.sh
 
 CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]

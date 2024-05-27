@@ -8,5 +8,6 @@ itsdangerous
 jinja2
 mako
 markupsafe
+SQLAlchemy-Utils
 sqlalchemy
 mysqlclient
