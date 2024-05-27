@@ -26,6 +26,7 @@ class TaskViewModel : ViewModel() {
     init {
         getTasks()
     }
+
     fun setTasks(taskList: List<Task>) {
         _tasks.value = taskList
         updateStatusCounts(taskList)
@@ -53,14 +54,14 @@ class TaskViewModel : ViewModel() {
 
     private fun updateStatusCounts(taskList: List<Task>) {
         val statusNew = taskList.count { it.status == "New" }
-        val statusOne = taskList.count { it.status == "In Progress" }
-        val statusTwo = taskList.count { it.status == "Done" }
+        val statusInProgress = taskList.count { it.status == "In Progress" }
+        val statusDone = taskList.count { it.status == "Done" }
 
         _statusNewCount.value = statusNew
-        _statusInProgressCount.value = statusOne
-        _statusDoneCount.value = statusTwo
+        _statusInProgressCount.value = statusInProgress
+        _statusDoneCount.value = statusDone
 
-        Log.d("com.example.SCTasks.TaskViewModel", "Status counts updated - NEW: $statusNew, INPROG: $statusOne, DONE: $statusTwo")
+        Log.d("com.example.SCTasks.TaskViewModel", "Status counts updated - NEW: $statusNew, IN PROGRESS: $statusInProgress, DONE: $statusDone")
     }
 
     fun updateTaskStatus(taskId: Int, newStatus: String) {
@@ -79,6 +80,26 @@ class TaskViewModel : ViewModel() {
                     Log.d("com.example.SCTasks.TaskViewModel", "Task status updated successfully")
                 } else {
                     Log.e("com.example.SCTasks.TaskViewModel", "Failed to update task status \n ${response.errorBody()?.string() ?: ""}")
+                }
+            }
+        })
+    }
+
+    fun deleteTask(taskId: Int) {
+        val call = taskApi.deleteTask(taskId)
+
+        call.enqueue(object : Callback<Void> {
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("com.example.SCTasks.TaskViewModel", "Failed to delete task", t)
+            }
+
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    // Refresh tasks after successful deletion
+                    getTasks()
+                    Log.d("com.example.SCTasks.TaskViewModel", "Task deleted successfully")
+                } else {
+                    Log.e("com.example.SCTasks.TaskViewModel", "Failed to delete task \n ${response.errorBody()?.string() ?: ""}")
                 }
             }
         })

@@ -2,6 +2,7 @@ package com.example.SCTasks
 
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -17,4 +18,7 @@ interface TaskApi {
 
     @PUT("/tasks/{id}")
     fun updateTaskStatus(@Path("id") id: Int, @Body statusUpdate: TaskStatusUpdate): Call<Void>
+
+    @DELETE("/tasks/{id}")
+    fun deleteTask(@Path("id") id: Int): Call<Void>
 }

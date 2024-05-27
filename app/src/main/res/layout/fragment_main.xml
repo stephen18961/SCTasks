@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{taskViewModel.newTasksCount} tasks"
+                android:text="0 tasks"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -98,7 +98,7 @@
                 android:id="@+id/textInProgressCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{taskViewModel.inProgressTasksCount} tasks"
+                android:text="0 tasks"
                 android:textSize="20sp"
                 android:textColor="@color/secondaryTextColor"
                 android:layout_gravity="center"/>
@@ -141,7 +141,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{taskViewModel.doneTasksCount} tasks"
+                android:text="0 tasks"
                 android:textColor="@color/secondaryTextColor"
                 android:textSize="20sp" />
         </LinearLayout>

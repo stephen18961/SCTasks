@@ -145,7 +145,17 @@
 
         </LinearLayout>
     </ScrollView>
-
+    <!-- Delete Button -->
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:backgroundTint="@color/errorColor"
+        android:layout_marginBottom="16dp" />
     <!-- Done Button -->
     <Button
         android:id="@+id/btnDone"

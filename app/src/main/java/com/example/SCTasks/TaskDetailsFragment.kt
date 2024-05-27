@@ -1,5 +1,6 @@
 package com.example.SCTasks
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ class TaskDetailsFragment : Fragment() {
     private var id: Int = 0
 
     private lateinit var textStatus: TextView
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,6 +54,7 @@ class TaskDetailsFragment : Fragment() {
         // Find the Button views by their IDs
         val btnStart = view.findViewById<Button>(R.id.btnStart)
         val btnDone = view.findViewById<Button>(R.id.btnDone)
+        val btnDelete = view.findViewById<Button>(R.id.btnDelete)
 
         textTitle.text = title.toString()
         textDescription.text = description.toString()
@@ -67,22 +70,28 @@ class TaskDetailsFragment : Fragment() {
                 // Status is 0, show Start button, hide Done button, enable both buttons
                 btnStart.visibility = View.VISIBLE
                 btnDone.visibility = View.GONE
+                btnDelete.visibility = View.GONE
                 btnStart.isEnabled = true
-                btnDone.isEnabled = true
+                btnDone.isEnabled = false
+                btnDelete.isEnabled = false
             }
             "In Progress" -> {
                 // Status is 1, hide Start button, show Done button, enable both buttons
                 btnStart.visibility = View.GONE
                 btnDone.visibility = View.VISIBLE
-                btnStart.isEnabled = true
+                btnDelete.visibility = View.GONE
+                btnStart.isEnabled = false
                 btnDone.isEnabled = true
+                btnDelete.isEnabled = false
             }
             "Done" -> {
                 // Status is 2, hide both buttons, disable both buttons
                 btnStart.visibility = View.GONE
                 btnDone.visibility = View.GONE
+                btnDelete.visibility = View.VISIBLE
                 btnStart.isEnabled = false
                 btnDone.isEnabled = false
+                btnDelete.isEnabled = true
             }
         }
 
@@ -98,11 +107,20 @@ class TaskDetailsFragment : Fragment() {
 
         // Set onClickListener for the Done button
         btnDone.setOnClickListener {
-            taskViewModel.updateTaskStatus(this.id, "Done")// Update status to "Done" (2)
+            taskViewModel.updateTaskStatus(this.id, "Done")// Update status to "Done"
             taskViewModel.getTasks()
 
             // Show a toast message to indicate the status change
             showToast("Task is now Done")
+            view.findNavController().navigate(R.id.action_taskDetailsFragment_to_mainFragment)
+        }
+
+        // Set onClickListener for the Delete button
+        btnDelete.setOnClickListener {
+            taskViewModel.deleteTask(this.id)
+
+            // Show a toast message to indicate the status change
+            showToast("Task is now Deleted")
             view.findNavController().navigate(R.id.action_taskDetailsFragment_to_mainFragment)
         }
 
