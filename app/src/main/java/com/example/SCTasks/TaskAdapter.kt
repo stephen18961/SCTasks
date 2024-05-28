@@ -1,5 +1,6 @@
 package com.example.SCTasks
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,6 +53,7 @@ class TaskAdapter(private var tasks: ArrayList<Task>) : RecyclerView.Adapter<Tas
     override fun getItemCount() = tasks.size
 
     // Method to update the tasks list and notify the adapter
+    @SuppressLint("NotifyDataSetChanged")
     fun updateTasks(newTasks: List<Task>) {
         tasks.clear()
         tasks.addAll(newTasks)

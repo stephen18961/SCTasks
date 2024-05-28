@@ -44,7 +44,6 @@
             android:focusable="true">
 
             <TextView
-                android:id="@+id/textNewTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -86,7 +85,6 @@
             android:focusable="true">
 
             <TextView
-                android:id="@+id/textInProgressTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="In Progress"
@@ -107,7 +105,6 @@
 
     <!-- Card 3: Done Tasks -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/doneTasksCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
@@ -128,7 +125,6 @@
             android:focusable="true">
 
             <TextView
-                android:id="@+id/textDoneTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -5,46 +5,5 @@
         <item>Urgent</item>
         <item>Important</item>
     </string-array>
-    <string-array name="taskTitlesExamples">
-        <item>Task 1</item>
-        <item>Task 2</item>
-        <item>Task 3</item>
-        <item>Task 4</item>
-        <item>Task 5</item>
-        <item>Task 6</item>
-        <item>Task 7</item>
-        <item>Task 8</item>
-        <item>Task 9</item>
-        <item>Task 1</item>
-        <item>Task 2</item>
-        <item>Task 3</item>
-        <item>Task 4</item>
-        <item>Task 5</item>
-        <item>Task 6</item>
-        <item>Task 7</item>
-        <item>Task 8</item>
-        <item>Task 9</item>
-    </string-array>
-    <string-array name="taskDescExamples">
-        <item>Task 1 Desc</item>
-        <item>Task 2 Desc</item>
-        <item>Task 3 Desc</item>
-        <item>Task 4 Desc</item>
-        <item>Task 5 Desc</item>
-        <item>Task 6 Desc</item>
-        <item>Task 7 Desc</item>
-        <item>Task 8 Desc</item>
-        <item>Task 9 Desc</item>
-        <item>Task 1 Desc</item>
-        <item>Task 2 Desc</item>
-        <item>Task 3 Desc</item>
-        <item>Task 4 Desc</item>
-        <item>Task 5 Desc</item>
-        <item>Task 6 Desc</item>
-        <item>Task 7 Desc</item>
-        <item>Task 8 Desc</item>
-        <item>Task 9 Desc</item>
-    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
