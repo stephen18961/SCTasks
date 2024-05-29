@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
+import pytz
 import os
 
 db = SQLAlchemy()
@@ -35,7 +36,7 @@ class Task(db.Model):
 def create_app():
     
     app = Flask(__name__)
-    if os.environ.get('FLASK_ENV') == 'docker':
+    if os.getenv('FLASK_ENV') == 'docker':
         db_url = "mysql://root:steve@db/tasks"
     else:
         db_url = "mysql://root:steve@localhost/tasks"
@@ -60,6 +61,8 @@ def create_app():
     
 app = create_app()
 
+# Set the timezone to GMT+7
+gmt_plus_7 = pytz.timezone('Asia/Bangkok')
 
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
@@ -79,7 +82,7 @@ def create_task():
         description=data['description'],
         category=data['category'],
         status=data['status'],
-        createdTime=data['createdTime'],
+        createdTime=datetime.now(gmt_plus_7).strftime("%Y-%m-%d %H:%M:%S"),
         finishedTime=data.get('finishedTime'),
         duration=data.get('duration')
     )   
@@ -95,7 +98,7 @@ def update_task(id):
     task.status = data['status']
 
     if data['status'] == 'Done':
-        task.finishedTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        task.finishedTime = datetime.now(gmt_plus_7).strftime("%Y-%m-%d %H:%M:%S")
         start = datetime.strptime(task.createdTime, "%Y-%m-%d %H:%M:%S")
         finish = datetime.strptime(task.finishedTime, "%Y-%m-%d %H:%M:%S")
 

@@ -6,6 +6,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: steve
       MYSQL_DATABASE: tasks
+      TZ: Asia/Bangkok
     ports:
       - "3306:3306"
     networks:
