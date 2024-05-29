@@ -145,7 +145,7 @@
 
         </LinearLayout>
     </ScrollView>
-    <!-- Delete Button -->
+    <!-- Delete Task Button -->
     <Button
         android:id="@+id/btnDelete"
         android:layout_width="wrap_content"
@@ -156,23 +156,23 @@
         app:layout_constraintStart_toStartOf="parent"
         android:backgroundTint="@color/errorColor"
         android:layout_marginBottom="16dp" />
-    <!-- Done Button -->
+    <!-- Finish Task Button -->
     <Button
         android:id="@+id/btnDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Done"
+        android:text="Finish"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:backgroundTint="@color/secondaryColor"
         android:layout_marginBottom="16dp" />
-    <!-- Start Button -->
+    <!-- Take Task Button -->
     <Button
         android:id="@+id/btnStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
+        android:text="Take"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
